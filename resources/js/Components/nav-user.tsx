@@ -20,14 +20,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/Components/ui/dropdown-menu"
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar"
-import { router } from "@inertiajs/react" // <-- correct
+} from "@/Components/ui/sidebar"
+import { router } from "@inertiajs/react"
 
 import * as React from "react"
 
@@ -52,7 +52,7 @@ export function NavUser({
       .toUpperCase()
 
   const handleLogout = () => {
-    router.post(route("logout"), {
+    router.post(route("logout"), {}, {   // ✅ fixed
       onFinish: () => setDropdownOpen(false), // close dropdown after logout
     })
   }
@@ -104,7 +104,7 @@ export function NavUser({
             <DropdownMenuSeparator />
 
             <DropdownMenuGroup>
-
+              {/* you can add profile/settings items here later */}
             </DropdownMenuGroup>
 
             <DropdownMenuSeparator />

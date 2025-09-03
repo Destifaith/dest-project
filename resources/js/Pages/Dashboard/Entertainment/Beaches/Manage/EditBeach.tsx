@@ -64,15 +64,15 @@ const EditBeach: React.FC = () => {
     }
   };
 
-  const handleMarkerDrag = useCallback((e: google.maps.MapMouseEvent) => {
-    if (e.latLng) {
-      setFormData(prev => ({
-        ...prev,
-        latitude: e.latLng.lat().toString(),
-        longitude: e.latLng.lng().toString(),
-      }));
-    }
-  }, []);
+ const handleMarkerDrag = useCallback((e: google.maps.MapMouseEvent) => {
+  if (!e.latLng) return; // safety check
+  setFormData(prev => ({
+    ...prev,
+    latitude: e.latLng!.lat().toString(),
+    longitude: e.latLng!.lng().toString(),
+  }));
+}, []);
+
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

@@ -2,11 +2,12 @@ import React from "react";
 import DashboardLayout from "../../../../DashboardLayout";
 import { usePage } from "@inertiajs/react";
 import { Beach } from "./ManageBeaches";
+import { PageProps } from "@/types";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 
 const ViewBeach: React.FC = () => {
-  const { beach } = usePage<{ beach: Beach }>().props;
-
+//   const { beach } = usePage<{ beach: Beach }>().props;
+const { beach } = usePage<PageProps<{ beach: Beach }>>().props;
   // Load Google Maps
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,

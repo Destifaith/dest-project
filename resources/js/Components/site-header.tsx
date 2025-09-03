@@ -3,7 +3,7 @@
 import * as React from "react"
 import { usePage, router } from "@inertiajs/react"
 import { Separator } from "@/Components/ui/separator"
-import { SidebarTrigger } from "@/components/ui/sidebar"
+import { SidebarTrigger } from "@/Components/ui/sidebar"
 import { ModeToggle } from "./mode-toggle"
 import {
   Avatar,
@@ -17,7 +17,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/Components/ui/dropdown-menu"
 
 // Define the User type (avatar optional)
 interface User {

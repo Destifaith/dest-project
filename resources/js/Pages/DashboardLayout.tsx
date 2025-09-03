@@ -1,6 +1,6 @@
 import { AppSidebar } from "@/Components/app-sidebar"
 import { SiteHeader } from "@/Components/site-header"
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
+import { SidebarInset, SidebarProvider } from "@/Components/ui/sidebar"
 import * as React from "react"
 
 interface DashboardLayoutProps {

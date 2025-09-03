@@ -3,18 +3,9 @@ import DashboardLayout from "../../../../DashboardLayout";
 import { Inertia } from "@inertiajs/inertia";
 import { router, usePage } from "@inertiajs/react";
 import { Eye, Pencil, Trash2 } from "lucide-react";
+import { PageProps } from "@/types"; // ✅ added import
 
-
-// interface Beach {
-//   id: number;
-//   name: string;
-//   location: string;
-//   sand_type: string;
-//   water_type: string;
-//   is_public: boolean;
-//   created_at: string;
-// }
-// Add this at the top where Beach is defined
+// Beach interface
 export interface Beach {
   id: number;
   name: string;
@@ -46,7 +37,6 @@ export interface Beach {
   }[];
 }
 
-
 interface Props {
   beaches: {
     data: Beach[];
@@ -55,7 +45,7 @@ interface Props {
 }
 
 const ManageBeaches: React.FC = () => {
-  const { beaches } = usePage().props as { beaches: Props['beaches'] };
+  const { beaches } = usePage<PageProps & { beaches: Props["beaches"] }>().props;
   const [search, setSearch] = useState("");
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,7 +64,9 @@ const ManageBeaches: React.FC = () => {
   };
 
   const togglePublic = (id: number, currentValue: boolean) => {
-    Inertia.put(route("beaches.togglePublic", id), { is_public: currentValue ? 0 : 1 });
+    Inertia.put(route("beaches.togglePublic", id), {
+      is_public: currentValue ? 0 : 1,
+    });
   };
 
   return (
@@ -127,17 +119,28 @@ const ManageBeaches: React.FC = () => {
             <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
               {beaches?.data?.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="px-6 py-4 text-center text-gray-500 dark:text-gray-300">
+                  <td
+                    colSpan={7}
+                    className="px-6 py-4 text-center text-gray-500 dark:text-gray-300"
+                  >
                     No beaches found.
                   </td>
                 </tr>
               ) : (
-                beaches.data.map((beach) => (
+                beaches.data.map((beach: Beach) => ( // ✅ typed beach
                   <tr key={beach.id}>
-                    <td className="px-6 py-4 text-gray-900 dark:text-gray-100 whitespace-normal break-words">{beach.name}</td>
-                    <td className="px-6 py-4 text-gray-900 dark:text-gray-100 whitespace-normal break-words">{beach.location}</td>
-                    <td className="px-6 py-4 text-gray-900 dark:text-gray-100 whitespace-normal break-words">{beach.sand_type}</td>
-                    <td className="px-6 py-4 text-gray-900 dark:text-gray-100 whitespace-normal break-words">{beach.water_type}</td>
+                    <td className="px-6 py-4 text-gray-900 dark:text-gray-100 whitespace-normal break-words">
+                      {beach.name}
+                    </td>
+                    <td className="px-6 py-4 text-gray-900 dark:text-gray-100 whitespace-normal break-words">
+                      {beach.location}
+                    </td>
+                    <td className="px-6 py-4 text-gray-900 dark:text-gray-100 whitespace-normal break-words">
+                      {beach.sand_type}
+                    </td>
+                    <td className="px-6 py-4 text-gray-900 dark:text-gray-100 whitespace-normal break-words">
+                      {beach.water_type}
+                    </td>
 
                     {/* Toggle switch for public */}
                     <td className="px-6 py-4 whitespace-normal break-words">
@@ -146,7 +149,9 @@ const ManageBeaches: React.FC = () => {
                           type="checkbox"
                           className="sr-only peer"
                           checked={beach.is_public}
-                          onChange={() => togglePublic(beach.id, beach.is_public)}
+                          onChange={() =>
+                            togglePublic(beach.id, beach.is_public)
+                          }
                         />
                         <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-primary rounded-full peer peer-checked:bg-green-600 transition-colors"></div>
                         <span className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-100">
@@ -155,7 +160,9 @@ const ManageBeaches: React.FC = () => {
                       </label>
                     </td>
 
-                    <td className="px-6 py-4 text-gray-500 dark:text-gray-300 whitespace-normal break-words">{beach.created_at}</td>
+                    <td className="px-6 py-4 text-gray-500 dark:text-gray-300 whitespace-normal break-words">
+                      {beach.created_at}
+                    </td>
 
                     {/* Action icons vertically */}
                     <td className="px-6 py-4 text-center space-y-2 flex flex-col items-center">
@@ -191,19 +198,26 @@ const ManageBeaches: React.FC = () => {
         {/* Pagination */}
         {beaches?.links && (
           <div className="mt-4 flex justify-end space-x-2">
-            {beaches.links.map((link, index) => (
-              <button
-                key={index}
-                disabled={!link.url}
-                onClick={() => link.url && router.get(link.url, {}, { preserveState: true })}
-                className={`px-3 py-1 rounded-md border ${
-                  link.active
-                    ? "bg-primary text-white border-primary"
-                    : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600"
-                }`}
-                dangerouslySetInnerHTML={{ __html: link.label }}
-              />
-            ))}
+            {beaches.links.map(
+              (
+                link: { label: string; url: string | null; active: boolean },
+                index: number // ✅ typed link + index
+              ) => (
+                <button
+                  key={index}
+                  disabled={!link.url}
+                  onClick={() =>
+                    link.url && router.get(link.url, {}, { preserveState: true })
+                  }
+                  className={`px-3 py-1 rounded-md border ${
+                    link.active
+                      ? "bg-primary text-white border-primary"
+                      : "bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600"
+                  }`}
+                  dangerouslySetInnerHTML={{ __html: link.label }}
+                />
+              )
+            )}
           </div>
         )}
       </div>
