@@ -70,18 +70,20 @@ const BeachesNearYou: React.FC = () => {
               className="pl-2 md:pl-4 md:basis-1/2 lg:basis-1/3"
             >
               <Card className="overflow-hidden rounded-xl shadow-lg hover:shadow-2xl transition transform hover:-translate-y-1 relative">
-                {/* Main Image */}
-                {beach.main_image ? (
-                  <img
-                    src={`/storage/${beach.main_image.image_path}`}
-                    alt={beach.name}
-                    className="w-full h-48 object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-48 bg-gray-200 flex items-center justify-center">
-                    <span className="text-gray-500">No Image</span>
-                  </div>
-                )}
+                {/* Clickable Main Image */}
+                <a href={`/beach-detailed?id=${beach.id}`}>
+                  {beach.main_image ? (
+                    <img
+                      src={`/storage/${beach.main_image.image_path}`}
+                      alt={beach.name}
+                      className="w-full h-48 object-cover cursor-pointer"
+                    />
+                  ) : (
+                    <div className="w-full h-48 bg-gray-200 flex items-center justify-center cursor-pointer">
+                      <span className="text-gray-500">No Image</span>
+                    </div>
+                  )}
+                </a>
 
                 {/* Default Price Tag with hover effect */}
                 <div className="absolute top-2 right-2 bg-green-600 bg-opacity-80 text-white text-xs font-semibold px-2 py-1 rounded transition duration-300 hover:bg-opacity-100">

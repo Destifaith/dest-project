@@ -1,7 +1,6 @@
 import * as React from "react"
 import { usePage } from "@inertiajs/react"
-import { ChevronRight } from "lucide-react"
-import { Map, BookOpen, GalleryVerticalEnd, Settings2 } from "lucide-react"
+import { ChevronRight, Map, BookOpen, GalleryVerticalEnd, Settings2 } from "lucide-react"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/Components/ui/tooltip"
 
 import {
@@ -22,6 +21,7 @@ import {
   SidebarRail,
 } from "@/Components/ui/sidebar"
 
+// ✅ Nav structure
 const navMain = [
   {
     title: "Accommodations",
@@ -57,8 +57,8 @@ const navMain = [
         title: "Restaurants",
         url: "#",
         items: [
-          { title: "Add", url: "#" },
-          { title: "Manage", url: "#" },
+          { title: "Add", url: "/dashboard/food/restaurants/add" },
+          { title: "Manage", url: "/dashboard/food/restaurants/manage" },
           { title: "Bookings", url: "#" },
           { title: "Menu", url: "#" },
         ],
@@ -67,8 +67,8 @@ const navMain = [
         title: "Eateries",
         url: "#",
         items: [
-          { title: "Add", url: "#" },
-          { title: "Manage", url: "#" },
+          { title: "Add", url: "/dashboard/food/eateries/add" },
+          { title: "Manage", url: "/dashboard/food/eateries/manage" },
         ],
       },
       {
@@ -91,8 +91,8 @@ const navMain = [
         title: "Events",
         url: "#",
         items: [
-          { title: "Add", url: "#" },
-          { title: "Manage", url: "#" },
+          { title: "Add", url: "/dashboard/entertainment/events/add" },
+          { title: "Manage", url: "/dashboard/entertainment/events/manage" },
           { title: "Bookings", url: "#" },
           { title: "Availability", url: "#" },
         ],
@@ -121,12 +121,16 @@ const navMain = [
         title: "Beaches",
         url: "#",
         items: [
-        //   { title: "Add", url: "#" },
-        // { title: "Add", url: route("beaches.add") },
-        { title: "Add", url: "/dashboard/entertainment/beaches/add" },
-          //{ title: "Manage", url: "#" },
-  { title: "Manage", url: "/dashboard/entertainment/beaches/manage" },
-
+          { title: "Add", url: "/dashboard/entertainment/beaches/add" },
+          { title: "Manage", url: "/dashboard/entertainment/beaches/manage" },
+        ],
+      },
+      {
+        title: "Swimming Pool",
+        url: "#",
+        items: [
+          { title: "Add", url: "/dashboard/entertainment/pool/add" },
+          { title: "Manage", url: "/dashboard/entertainment/pool/manage" },
         ],
       },
     ],
@@ -137,20 +141,20 @@ const navMain = [
     items: [
       {
         title: "Spa",
-        url: "#",
+        url: "/dashboard/entertainment/spa/add",
         items: [
-          { title: "Add", url: "#" },
-          { title: "Manage", url: "#" },
+          { title: "Add", url: "/dashboard/entertainment/spa/add" },
+          { title: "Manage", url: "/dashboard/entertainment/spa/manage" },
           { title: "Bookings", url: "#" },
           { title: "Availability", url: "#" },
         ],
       },
       {
         title: "Gym",
-        url: "#",
+        url: "/dashboard/entertainment/gym/add",
         items: [
-          { title: "Add", url: "#" },
-          { title: "Manage", url: "#" },
+          { title: "Add", url: "/dashboard/entertainment/gym/add" },
+          { title: "Manage", url: "/dashboard/entertainment/gym/manage" },
           { title: "Bookings", url: "#" },
           { title: "Availability", url: "#" },
         ],
@@ -175,37 +179,37 @@ const navMain = [
 ]
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { auth } = usePage().props as { auth: { user: { name: string; role: string } } }
+  // ✅ Correctly typed now (auth.user has role, name, etc.)
+  const { auth } = usePage().props
 
   return (
     <Sidebar {...props}>
       {/* Sidebar Header with User Info */}
-        <SidebarHeader>
-  <div className="flex items-center gap-2 px-2 py-3">
-    <TooltipProvider>
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-semibold cursor-pointer">
-            {auth.user.name
-              .split(" ")
-              .map((n) => n.charAt(0).toUpperCase())
-              .slice(0, 2)
-              .join("")}
-          </span>
-        </TooltipTrigger>
-        <TooltipContent>
-          <div className="flex flex-col">
-            <span className="font-medium">{auth.user.name}</span>
-            <span className="text-xs text-muted-foreground">{auth.user.role}</span>
-          </div>
-        </TooltipContent>
-      </Tooltip>
-    </TooltipProvider>
+      <SidebarHeader>
+        <div className="flex items-center gap-2 px-2 py-3">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-semibold cursor-pointer">
+                  {auth.user.name
+                    .split(" ")
+                    .map((n) => n.charAt(0).toUpperCase())
+                    .slice(0, 2)
+                    .join("")}
+                </span>
+              </TooltipTrigger>
+              <TooltipContent>
+                <div className="flex flex-col">
+                  <span className="font-medium">{auth.user.name}</span>
+                  <span className="text-xs text-muted-foreground">{auth.user.role}</span>
+                </div>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
 
-    <span>Hospitality Answer</span>
-  </div>
-</SidebarHeader>
-
+          <span>Hospitality Answer</span>
+        </div>
+      </SidebarHeader>
 
       {/* Sidebar Content */}
       <SidebarContent className="gap-0">

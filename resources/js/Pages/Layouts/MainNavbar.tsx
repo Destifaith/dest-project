@@ -70,11 +70,8 @@ const MainNavbar: React.FC = () => {
   ];
 
   return (
-    // <nav className="bg-white dark:bg-gray-900 shadow fixed w-full z-50 border-t-4 border-b-2 border-green-500">
-      <nav className="bg-white dark:bg-gray-900 shadow w-full z-50">
-      {/* <div className="container mx-auto px-4 flex justify-between items-center h-16"> */}
-        <div className="container mx-auto px-4 flex justify-between items-center h-16 mb-0">
-
+    <nav className="bg-white dark:bg-gray-900 shadow w-full z-50 relative">
+      <div className="container mx-auto px-4 flex justify-between items-center h-16">
         {/* Logo */}
         <Link href="/" className="text-xl font-bold text-gray-900 dark:text-white">
           Hospitality
@@ -99,7 +96,7 @@ const MainNavbar: React.FC = () => {
           >
             <Home className="w-6 h-6" />
             {/* Tooltip */}
-            <span className="absolute left-1/2 -translate-x-1/2 top-8 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition">
+            <span className="absolute left-1/2 -translate-x-1/2 top-8 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition pointer-events-none">
               Home
             </span>
           </Link>
@@ -129,16 +126,15 @@ const MainNavbar: React.FC = () => {
                 } hover:text-green-500`}
               >
                 {menu.icon}
-                <span className="absolute left-1/2 -translate-x-1/2 top-8 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition">
+                <span className="absolute left-1/2 -translate-x-1/2 top-8 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition pointer-events-none">
                   {menu.name}
                 </span>
               </button>
 
               {/* Dropdown */}
               {openDropdown === menu.key && (
-                // <div className="absolute mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2">
-                <div className="absolute top-full w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2">
-                {menu.items.map((item) => (
+                <div className="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2 z-50 border border-gray-200 dark:border-gray-700">
+                  {menu.items.map((item) => (
                     <Link
                       key={item.name}
                       href={item.href}
@@ -147,6 +143,7 @@ const MainNavbar: React.FC = () => {
                           ? "bg-green-50 dark:bg-gray-700 text-green-600 dark:text-green-400 font-semibold"
                           : "text-gray-700 dark:text-gray-300"
                       } hover:bg-gray-100 dark:hover:bg-gray-700`}
+                      onClick={() => setOpenDropdown(null)}
                     >
                       {item.icon}
                       <span className="ml-2">{item.name}</span>
@@ -175,7 +172,7 @@ const MainNavbar: React.FC = () => {
             } hover:text-green-500`}
           >
             <Briefcase className="w-6 h-6" />
-            <span className="absolute left-1/2 -translate-x-1/2 top-8 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition">
+            <span className="absolute left-1/2 -translate-x-1/2 top-8 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition pointer-events-none">
               Job
             </span>
           </Link>

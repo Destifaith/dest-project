@@ -1,11 +1,15 @@
 import React from "react";
 import MainLayout from "@/Pages/Layouts/MainLayout";
+import BeachHero from "./Components/BeachHero";
+import CountryBeaches from "./Components/CountryBeaches";
+import BeachExplorerSection from "./Components/BeachExplorerSection";
 
 const BeachPage = () => {
   return (
     <MainLayout>
-      <h1 className="text-2xl font-bold">Beaches</h1>
-      <p className="mt-2 text-gray-600">List of beautiful beaches will go here.</p>
+    <BeachHero/>
+    <CountryBeaches/>
+    <BeachExplorerSection/>
     </MainLayout>
   );
 };

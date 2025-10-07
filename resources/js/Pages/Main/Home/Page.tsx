@@ -5,7 +5,9 @@ import SearchSection from "./Components/SearchSection";
 import AdvertCenter from "./Components/Advert Center";
 import { RecommendedHotels } from "./Components/RecommendedHotels";
 import BeachesNearYou from "./Components/BeachesNearYou";
-import { EateriesCarousel } from "./Components/EateriesCarousel";
+import EateriesCarousel from '@/Pages/Main/Home/Components/EateriesCarousel';
+import { CarsCarousel } from "./Components/CarsCarousel";
+import ExplorePlaces from "./Components/ExplorePlaces";
 
 const HomePage = () => {
   return (
@@ -16,6 +18,8 @@ const HomePage = () => {
         <RecommendedHotels/>
         <BeachesNearYou/>
         <EateriesCarousel/>
+        <CarsCarousel/>
+        <ExplorePlaces/>
     </MainLayout>
   );
 };
