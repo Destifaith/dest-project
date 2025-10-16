@@ -144,6 +144,69 @@ interface Restaurant {
   awards: Award[];
   is_active: boolean;
 }
+interface Gym {
+        id: number;
+        name: string;
+        location: string;
+        description: string;
+        latitude: number;
+        longitude: number;
+        equipment_type: string;
+        gym_type: string;
+        facilities: string;
+        price: string;
+        main_image: string | null;
+        gallery_images: string | null;
+        is_active: boolean;
+        opening_hours: string;
+        created_at: string;
+        updated_at: string;
+    }
+
+
+    // ... your existing types ...
+
+export interface Spa {
+    id: number;
+    name: string;
+    location: string;
+    description: string;
+    latitude?: number;
+    longitude?: number;
+    treatment_type: string;
+    ambiance_type: string;
+    facilities: string;
+    price: string;
+    main_image: string | null;
+    gallery_images?: string[];
+    opening_hours?: any;
+    average_rating: number;
+    review_count: number;
+}
+
+export interface SpaReview {
+    id: number;
+    user_name: string;
+    rating: number;
+    comment: string;
+    created_at: string;
+}
+
+export interface SpaDetail extends Spa {
+    reviews: SpaReview[];
+    gallery_images: string[];
+    opening_hours: Record<string, string>;
+}
+
+export interface RelatedSpa {
+    id: number;
+    name: string;
+    location: string;
+    treatment_type: string;
+    price: string;
+    main_image: string | null;
+    average_rating: number;
+}
 // Add other existing interfaces as needed
 export interface User {
   id: number;

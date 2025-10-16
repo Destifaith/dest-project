@@ -5,14 +5,14 @@ import { useState, useEffect } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 
 const images = [
-  "/tartinery_restaurant_s230411_3.webp",
-  "/XXL_height.webp",
-  "/traditional-korean-fermented-food-at-the-gwangjang-market-seoul-south-korea-PNAA4A.jpg",
-  "/cultin.jpg",
-  "/cultin2.jpg",
+  "gym/modern-gym-interior.png",
+  "gym/person-doing-deadlift-in-gym.jpg",
+  "gym/group-fitness.png",
+  "gym/athletic-person-running-on-treadmill.jpg",
+  "gym/weight-training-area-with-dumbbells-and-barbells.jpg",
 ]
 
-const EateryHero: React.FC = () => {
+const GymHero: React.FC = () => {
   const [current, setCurrent] = useState(0)
 
   // Auto slide every 5s
@@ -44,10 +44,10 @@ const EateryHero: React.FC = () => {
           >
             <img
               src={img || "/placeholder.svg"}
-              alt={`Culinary experience ${index + 1}`}
+              alt={`Gym experience ${index + 1}`}
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-b from-amber-950/60 via-amber-950/40 to-amber-950/70" />
+            <div className="absolute inset-0 bg-gradient-to-b from-slate-950/70 via-slate-950/50 to-slate-950/80" />
           </div>
         ))}
       </div>
@@ -55,13 +55,13 @@ const EateryHero: React.FC = () => {
       {/* Content overlay */}
       <div className="relative z-10 text-center text-white px-6 max-w-5xl">
         <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 tracking-tight text-balance">
-          Discover Extraordinary Dining
+          Transform Your Body & Mind
         </h1>
-        <p className="text-lg md:text-2xl mb-10 text-amber-50/90 font-light tracking-wide text-pretty max-w-3xl mx-auto">
-          Explore curated eateries, reserve your table, and savor unforgettable culinary experiences
+        <p className="text-lg md:text-2xl mb-10 text-slate-50/90 font-light tracking-wide text-pretty max-w-3xl mx-auto">
+          State-of-the-art facilities, expert trainers, and a community dedicated to your fitness journey
         </p>
         <button className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-4 rounded-lg text-lg font-medium transition-all hover:scale-105 shadow-xl">
-          Explore Eateries
+          Start Your Journey
         </button>
       </div>
 
@@ -98,4 +98,4 @@ const EateryHero: React.FC = () => {
   )
 }
 
-export default EateryHero
+export default GymHero

@@ -3,115 +3,266 @@ import React from 'react';
 import { Head, router, usePage } from '@inertiajs/react';
 import MainLayout from '@/Pages/Layouts/MainLayout';
 
-// Beach booking
+// Beach booking - UPDATED to snake_case
+// Beach booking - UPDATED to snake_case
 interface BeachCartItem {
   type: 'beach';
   id: string;
-  beachId: number;
-  beachName: string;
-  beachLocation: string;
-  beachImageUrl: string;
-  adultPrice: number;
-  childPrice: number;
+  beach_id: number;
+  beach_name: string;
+  beach_location: string;
+  beach_image_url: string;
+  adult_price: number;
+  child_price: number;
   adults: number;
   children: number;
-  preferredDate: string;
+  preferred_date: string;
   subtotal: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  countryCode: string;
-  country: string;
-  city: string;
+  customer_first_name: string;
+  customer_last_name: string;
+  customer_email: string;
+  customer_phone: string;
+  customer_country: string;
+  customer_city: string;
+  customer_address?: string;
 }
 
-// Eatery reservation
+// Eatery reservation - UPDATED to snake_case
 interface EateryReservationCartItem {
   type: 'eatery_reservation';
   id: string;
-  eateryId: number;
-  eateryName: string;
-  eateryLocation: string;
-  eateryImageUrl: string;
-  pricePerPerson: number;
-  numberOfPeople: number;
-  preferredDate: string;
+  eatery_id: number;
+  eatery_name: string;
+  eatery_location: string;
+  eatery_image: string;
+  cuisine_type?: string;
+  price_per_person: number;
+  number_of_people: number;
+  preferred_date: string;
+  preferred_time: string;
+  table_preference?: string;
+  occasion?: string;
+  special_requirements?: string;
   subtotal: number;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  countryCode: string;
-  country: string;
-  city: string;
+  tax: number;
+  service_charge: number;
+  total: number;
+  customer_first_name: string;
+  customer_last_name: string;
+  customer_email: string;
+  customer_phone: string;
+  customer_country: string;
+  customer_city: string;
+  customer_address?: string;
 }
 
-// Eatery delivery
+// Eatery delivery - UPDATED to snake_case
 interface EateryDeliveryCartItem {
   type: 'eatery_delivery';
   id: string;
-  eateryId: number;
-  eateryName: string;
-  eateryLocation: string;
-  eateryImageUrl: string;
-  items: Array<{ name: string; price: number; quantity: number }>;
-  deliveryFee: number;
+  eatery_id: number;
+  eatery_name: string;
+  eatery_location: string;
+  eatery_image: string;
+  cuisine_type?: string;
+  items: Array<{ id: string; name: string; price: number; quantity: number; category?: string }>;
   subtotal: number;
-  deliveryDistance: number;
-  deliveryLocation: { address: string };
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  countryCode: string;
-  country: string;
-  city: string;
-  address: string;
-  apartment: string;
-  postalCode: string;
-  deliveryInstructions: string;
-  preferredDate: string;
-  preferredTime: string;
-  paymentMethod: string;
+  delivery_fee: number;
+  tax: number;
+  total: number;
+  delivery_distance: number;
+  delivery_address: string;
+  delivery_apartment?: string;
+  delivery_postal_code?: string;
+  delivery_instructions?: string;
+  preferred_date: string;
+  preferred_time: string;
+  payment_method: string;
+  customer_first_name: string;
+  customer_last_name: string;
+  customer_email: string;
+  customer_phone: string;
+  customer_country: string;
+  customer_city: string;
 }
 
-type CartItem = BeachCartItem | EateryReservationCartItem | EateryDeliveryCartItem;
+// Gym booking - UPDATED to snake_case
+// Gym booking - UPDATED to snake_case with subtotal
+interface GymBookingCartItem {
+  type: 'gym_booking';
+  id: string;
+  gym_id: number;
+  gym_name: string;
+  gym_location: string;
+  gym_image: string;
+  gym_type?: string;
+  equipment_type?: string;
+  membership_type: 'visit' | 'membership';
+  duration_months: number;
+  family_pack: boolean;
+  base_price: number;
+  final_price: number;
+  subtotal: number; // ✅ ADDED THIS LINE
+  emergency_contact: string;
+  emergency_phone: string;
+  health_conditions?: string;
+  fitness_goals: string;
+  preferred_start_date: string;
+  preferred_time: string;
+  payment_method: string;
+  address: string;
+  pricing_breakdown?: any;
+  customer_first_name: string;
+  customer_last_name: string;
+  customer_email: string;
+  customer_phone: string;
+  customer_country: string;
+  customer_city: string;
+}
+
+// ADD THIS - Spa booking interface
+interface SpaBookingCartItem {
+  type: 'spa_booking';
+  id: string;
+  spa_id: number;
+  spa_name: string;
+  spa_location: string;
+  spa_image: string;
+  spa_type?: string;
+  ambiance_type?: string;
+  booking_type: 'treatment' | 'package' | 'day_pass';
+  treatment_type?: string;
+  duration_hours: number;
+  number_of_guests: number;
+  base_price: number;
+  final_price: number;
+  subtotal: number;
+  tax: number;
+  service_charge: number;
+  total: number;
+  preferred_date: string;
+  preferred_time: string;
+  payment_method: string;
+  aromatherapy_preference?: string;
+  therapist_gender_preference?: string;
+  wellness_goals?: string;
+  health_conditions?: string;
+  special_requirements?: string;
+  customer_first_name: string;
+  customer_last_name: string;
+  customer_email: string;
+  customer_phone: string;
+  customer_country: string;
+  customer_city: string;
+  address: string;
+  emergency_contact: string;
+  emergency_phone: string;
+  pricing_breakdown?: any;
+}
+
+type CartItem = BeachCartItem | EateryReservationCartItem | EateryDeliveryCartItem | GymBookingCartItem | SpaBookingCartItem;
 
 interface CartProps {
   cartItems: CartItem[];
 }
 
+// UPDATED Helper functions for type-safe access
+const getImageUrl = (item: CartItem): string => {
+  switch (item.type) {
+    case 'beach': return item.beach_image_url;
+    case 'eatery_reservation':
+    case 'eatery_delivery': return item.eatery_image;
+    case 'gym_booking': return item.gym_image;
+    case 'spa_booking': return item.spa_image; // ADD THIS LINE
+    default: return "/storage/default-placeholder.jpg";
+  }
+};
+
+const getName = (item: CartItem): string => {
+  switch (item.type) {
+    case 'beach': return item.beach_name;
+    case 'eatery_reservation':
+    case 'eatery_delivery': return item.eatery_name;
+    case 'gym_booking': return item.gym_name;
+    case 'spa_booking': return item.spa_name; // ADD THIS LINE
+    default: return 'Unknown';
+  }
+};
+
+const getLocation = (item: CartItem): string => {
+  switch (item.type) {
+    case 'beach': return item.beach_location;
+    case 'eatery_reservation':
+    case 'eatery_delivery': return item.eatery_location;
+    case 'gym_booking': return item.gym_location;
+    case 'spa_booking': return item.spa_location; // ADD THIS LINE
+    default: return 'Unknown Location';
+  }
+};
+
+const getDate = (item: CartItem): string => {
+  switch (item.type) {
+    case 'beach':
+    case 'eatery_reservation':
+    case 'eatery_delivery': return item.preferred_date;
+    case 'gym_booking': return item.preferred_start_date;
+    case 'spa_booking': return item.preferred_date; // ADD THIS LINE
+    default: return '';
+  }
+};
+
 const Cart: React.FC<CartProps> = ({ cartItems }) => {
   const { props } = usePage();
   const flash = props.flash as { success?: string };
 
-  // Calculate totals including delivery fees
-  const subtotal = cartItems.reduce((sum, item) => sum + item.subtotal, 0);
+  // Calculate totals including delivery fees - FIXED
+  const subtotal = cartItems.reduce((sum, item) => {
+    switch (item.type) {
+      case 'eatery_reservation':
+        return sum + (item.total || item.subtotal);
+      case 'gym_booking':
+        return sum + (item.final_price || item.subtotal || 0); // ✅ Handle gym booking
+        case 'spa_booking': // ADD THIS CASE
+      return item.final_price || item.total || item.subtotal || 0;
+      default:
+        return sum + (item.subtotal || 0);
+    }
+  }, 0);
+
   const deliveryFees = cartItems
     .filter((item): item is EateryDeliveryCartItem => item.type === 'eatery_delivery')
-    .reduce((sum, item) => sum + item.deliveryFee, 0);
-  const tax = (subtotal + deliveryFees) > 0 ? Math.max((subtotal + deliveryFees) * 0.1, 2) : 0;
+    .reduce((sum, item) => sum + (item.delivery_fee || 0), 0);
+
+  const tax = cartItems.reduce((sum, item) => {
+    if (item.type === 'eatery_reservation' || item.type === 'eatery_delivery') {
+      return sum + (item.tax || 0);
+    }
+    return sum;
+  }, 0);
+
   const total = subtotal + deliveryFees + tax;
+
+  // Helper function to get display price for each item - ADD THIS FUNCTION
+  const getDisplayPrice = (item: CartItem): number => {
+    switch (item.type) {
+      case 'eatery_reservation':
+        return item.total || item.subtotal;
+      case 'gym_booking':
+        return item.final_price || item.subtotal || 0; // ✅ Handle gym booking
+      default:
+        return item.subtotal || 0;
+    }
+  };
 
   const handleRemoveItem = (itemId: string) => {
     if (confirm('Are you sure you want to remove this item?')) {
-      router.delete(`/cart/${itemId}`, {
-        onSuccess: () => {
-          // Inertia auto-refreshes
-        },
-        onError: (errors) => {
-          alert('Failed to remove item. Please try again.');
-          console.error('Remove item error:', errors);
-        }
-      });
+      router.delete(`/cart/${itemId}`);
     }
   };
 
   const handleProceedToCheckout = () => {
     if (cartItems.length === 0) return;
     alert('Checkout functionality coming soon!');
-    // router.visit('/checkout');
   };
 
   return (
@@ -122,7 +273,6 @@ const Cart: React.FC<CartProps> = ({ cartItems }) => {
         <div className="container mx-auto px-4">
           <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">Your Cart</h1>
 
-          {/* Flash Message */}
           {flash?.success && (
             <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6 max-w-4xl mx-auto">
               {flash.success}
@@ -147,68 +297,122 @@ const Cart: React.FC<CartProps> = ({ cartItems }) => {
                   <div key={item.id} className="bg-white p-6 rounded-lg shadow-md">
                     <div className="flex flex-col md:flex-row gap-4">
                       <img
-                        src={item.type === 'beach' ? item.beachImageUrl : (item as any).eateryImageUrl}
-                        alt={item.type === 'beach' ? item.beachName : (item as any).eateryName}
+                        src={getImageUrl(item)}
+                        alt={getName(item)}
                         className="w-full md:w-32 h-32 object-cover rounded-lg"
                         onError={(e) => {
                           (e.target as HTMLImageElement).src = "/storage/default-placeholder.jpg";
                         }}
                       />
-                      <div className="flex-1">
-                        <h3 className="text-xl font-semibold text-gray-800">
-                          {item.type === 'beach' ? item.beachName : (item as any).eateryName}
-                        </h3>
-                        <p className="text-gray-600">
-                          {item.type === 'beach' ? item.beachLocation : (item as any).eateryLocation}
-                        </p>
-                        <p className="text-sm text-gray-500 mt-1">
-                          Date: {new Date(item.preferredDate).toLocaleDateString()}
-                          {item.type === 'eatery_delivery' && ` at ${(item as EateryDeliveryCartItem).preferredTime}`}
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          Guest: {item.firstName} {item.lastName}
-                        </p>
-                        <p className="text-sm text-gray-500">
-                          Contact: {item.countryCode} {item.phone} • {item.email}
-                        </p>
-
-                        {/* Type-specific details */}
-                        {item.type === 'beach' && (
-                          <p className="mt-3">
-                            <strong>Guests:</strong> {item.adults} Adult(s), {item.children} Child(ren)
+                      <div className="flex-1 flex justify-between items-start">
+                        <div className="flex-1">
+                          <h3 className="text-xl font-semibold text-gray-800">
+                            {getName(item)}
+                          </h3>
+                          <p className="text-gray-600">
+                            {getLocation(item)}
                           </p>
-                        )}
-                        {item.type === 'eatery_reservation' && (
-                          <p className="mt-3">
-                            <strong>Guests:</strong> {(item as EateryReservationCartItem).numberOfPeople} Person(s)
+                          <p className="text-sm text-gray-500 mt-1">
+                            Date: {new Date(getDate(item)).toLocaleDateString()}
+                            {(item.type === 'eatery_delivery' || item.type === 'eatery_reservation') && (
+                              ` at ${(item as any).preferred_time}`
+                            )}
+                            {item.type === 'gym_booking' && (
+                              ` at ${item.preferred_time}`
+                            )}
                           </p>
-                        )}
-                        {item.type === 'eatery_delivery' && (
-                          <div className="mt-3">
-                            <strong>Order:</strong>
-                            <ul className="list-disc list-inside text-sm mt-1">
-                              {(item as EateryDeliveryCartItem).items.map((food, idx) => (
-                                <li key={idx}>
-                                  {food.name} × {food.quantity} — ${food.price.toFixed(2)}
-                                </li>
-                              ))}
-                            </ul>
-                            <p className="mt-2">
-                              <strong>Delivery Address:</strong> {(item as EateryDeliveryCartItem).address}
-                              {(item as EateryDeliveryCartItem).apartment && `, ${(item as EateryDeliveryCartItem).apartment}`}
-                            </p>
-                            <p className="mt-1">
-                              <strong>Delivery Fee:</strong> ${(item as EateryDeliveryCartItem).deliveryFee.toFixed(2)}
-                            </p>
-                          </div>
-                        )}
+                          <p className="text-sm text-gray-500">
+                            Guest: {item.customer_first_name} {item.customer_last_name}
+                          </p>
+                          <p className="text-sm text-gray-500">
+                            Contact: {item.customer_phone} • {item.customer_email}
+                          </p>
 
-                        <div className="mt-4 flex justify-between items-center">
+                          {/* Type-specific details */}
+                         {item.type === 'beach' && (
+  <div className="mt-3  text-gray-900">
+    <p><strong>Guests:</strong> {item.adults} Adult(s), {item.children} Child(ren)</p>
+    {/* <p><strong>Price Breakdown:</strong></p> */}
+    <div className="text-sm text-gray-600 ml-2">
+      {/* <p>Adult: ${item.adult_price?.toFixed(2)} × {item.adults} = ${(item.adult_price * item.adults).toFixed(2)}</p>
+      <p>Child: ${item.child_price?.toFixed(2)} × {item.children} = ${(item.child_price * item.children).toFixed(2)}</p> */}
+      {/* <p className="font-semibold">Subtotal: ${item.subtotal?.toFixed(2)}</p> */}
+    </div>
+  </div>
+)}
+                          {item.type === 'eatery_reservation' && (
+                            <p className="mt-  text-gray-900">
+                              <strong>Guests:</strong> {item.number_of_people} Person(s)
+                            </p>
+                          )}
+                          {item.type === 'eatery_delivery' && (
+                            <div className="mt-3">
+                              <strong>Order:</strong>
+                              <ul className="list-disc list-inside text-sm mt-1">
+                                {item.items.map((food, idx) => (
+                                  <li key={idx}>
+                                    {food.name} × {food.quantity} — ${food.price.toFixed(2)}
+                                  </li>
+                                ))}
+                              </ul>
+                              <p className="mt-2">
+                                <strong>Delivery Address:</strong> {item.delivery_address}
+                                {item.delivery_apartment && `, ${item.delivery_apartment}`}
+                              </p>
+                              <p className="mt-1">
+                                <strong>Delivery Fee:</strong> ${item.delivery_fee.toFixed(2)}
+                              </p>
+                            </div>
+                          )}
+                          {item.type === 'gym_booking' && (
+                            <div className="mt-3  text-gray-900">
+                              {/* <p><strong>Membership Type:</strong> {item.membership_type === 'visit' ? 'Single Visit' : 'Monthly Membership'}</p> */}
+                              {item.membership_type === 'membership' && (
+                                <>
+                                  {/* <p><strong>Duration:</strong> {item.duration_months} month{item.duration_months > 1 ? 's' : ''}</p>
+                                  <p><strong>Family Pack:</strong> {item.family_pack ? 'Yes (20% off)' : 'No'}</p> */}
+                                </>
+                              )}
+                              {/* <p><strong>Fitness Goals:</strong> {item.fitness_goals}</p> */}
+                              {/* {item.health_conditions && (
+                                <p><strong>Health Notes:</strong> {item.health_conditions}</p>
+                              )} */}
+                              {/* <p><strong>Emergency Contact:</strong> {item.emergency_contact} ({item.emergency_phone})</p> */}
+                            </div>
+                          )}
+{item.type === 'spa_booking' && (
+  <div className="mt-3 text-gray-900">
+    <p><strong>Booking Type:</strong>
+      {item.booking_type === 'treatment' ? 'Individual Treatment' :
+       item.booking_type === 'package' ? 'Wellness Package' : 'Day Pass'}
+    </p>
+    {item.treatment_type && (
+      <p><strong>Treatment:</strong> {item.treatment_type}</p>
+    )}
+    {item.booking_type === 'treatment' && (
+      <p><strong>Duration:</strong> {item.duration_hours} hour{item.duration_hours > 1 ? 's' : ''}</p>
+    )}
+    <p><strong>Guests:</strong> {item.number_of_guests}</p>
+    {item.aromatherapy_preference && item.aromatherapy_preference !== 'No Preference' && (
+      <p><strong>Aromatherapy:</strong> {item.aromatherapy_preference}</p>
+    )}
+    {item.therapist_gender_preference && item.therapist_gender_preference !== 'No Preference' && (
+      <p><strong>Therapist Preference:</strong> {item.therapist_gender_preference}</p>
+    )}
+    {item.wellness_goals && (
+      <p><strong>Wellness Goals:</strong> {item.wellness_goals}</p>
+    )}
+  </div>
+)}
+                        </div>
+
+                        {/* Price and Remove Button */}
+                        <div className="flex flex-col items-end gap-2 ml-4">
                           <p className="text-lg font-bold text-green-600">
-                            ${item.subtotal.toFixed(2)}
+                            ${getDisplayPrice(item).toFixed(2)} {/* ✅ Use the helper function */}
                             {item.type === 'eatery_delivery' && (
-                              <span className="block text-sm font-normal mt-1">
-                                + ${(item as EateryDeliveryCartItem).deliveryFee.toFixed(2)} delivery
+                              <span className="block text-sm font-normal mt-1 text-right">
+                                + ${item.delivery_fee.toFixed(2)} delivery
                               </span>
                             )}
                           </p>
@@ -226,48 +430,34 @@ const Cart: React.FC<CartProps> = ({ cartItems }) => {
               </div>
 
               {/* Order Summary */}
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-xl font-bold mb-4 text-gray-800">Order Summary</h2>
+              <div className="bg-white p-6 rounded-lg shadow-md h-fit">
+                <h2 className="text-xl font-bold mb-4 text-gray-900">Order Summary</h2>
                 <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Subtotal</span>
-                    <span className="font-semibold">${subtotal.toFixed(2)}</span>
-                  </div>
-                  {deliveryFees > 0 && (
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Delivery Fees</span>
-                      <span className="font-semibold">${deliveryFees.toFixed(2)}</span>
-                    </div>
-                  )}
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Tax (10%)</span>
-                    <span className="font-semibold">${tax.toFixed(2)}</span>
-                  </div>
-                  <div className="border-t pt-3 flex justify-between font-bold text-lg">
+                  <div className="border-t pt-3  text-gray-900 flex justify-between font-bold text-lg">
                     <span>Total</span>
                     <span>${total.toFixed(2)}</span>
                   </div>
                 </div>
 
-                <div className="space-y-3">
-  <button
-    onClick={handleProceedToCheckout}
-    className="w-full py-3 px-4 rounded-md text-white font-medium bg-green-500 hover:bg-green-600 transition"
-  >
-    Proceed to Checkout
-  </button>
+                <div className="mt-6 space-y-3">
+                  <button
+                    onClick={handleProceedToCheckout}
+                    disabled={cartItems.length === 0}
+                    className={`w-full py-3 px-4 rounded-md text-white font-medium transition ${
+                      cartItems.length === 0
+                        ? 'bg-gray-400 cursor-not-allowed'
+                        : 'bg-green-500 hover:bg-green-600'
+                    }`}
+                  >
+                    Proceed to Checkout
+                  </button>
 
-  <button
-    onClick={() => router.visit('/')}
-    className="w-full py-3 px-4 rounded-md text-gray-700 font-medium bg-gray-200 hover:bg-gray-300 transition"
-  >
-    ← Continue Shopping
-  </button>
-</div>
-
-                <div className="mt-4 text-sm text-gray-500 text-center">
-                  <p>By proceeding, you agree to our</p>
-                  <a href="#" className="text-green-500 hover:underline">Terms & Conditions</a>
+                  <button
+                    onClick={() => router.visit('/')}
+                    className="w-full py-3 px-4 rounded-md text-gray-700 font-medium bg-gray-200 hover:bg-gray-300 transition"
+                  >
+                    ← Continue Shopping
+                  </button>
                 </div>
               </div>
             </div>

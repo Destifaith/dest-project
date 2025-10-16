@@ -34,8 +34,10 @@ type FormData = {
   adults: string;
   children: string;
   specialRequest: string;
+  total: string; // ✅ Add this field
 };
 
+// Define a type for the errors state object
 // Define a type for the errors state object
 type FormErrors = {
   firstName?: string;
@@ -51,6 +53,7 @@ type FormErrors = {
   adults?: string;
   children?: string;
   specialRequest?: string;
+  total?: string; // ✅ Add this field to match FormData
 };
 
 // Define types for the beach prop
@@ -120,7 +123,8 @@ const BeachBooking = ({ beach }: BeachProps) => {
     preferredDate: "",
     adults: "1",
     children: "0",
-    specialRequest: ""
+    specialRequest: "",
+    total: "0.00" // ✅ Add initial value
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -166,6 +170,26 @@ const BeachBooking = ({ beach }: BeachProps) => {
 
   // Default coordinates (Accra, Ghana) if beach coordinates not provided
   const beachCoords = beach.coordinates || { lat: 5.6037, lng: -0.1870 };
+
+  // Update total in formData whenever prices change
+  useEffect(() => {
+    const adultPrice = typeof beach.price === 'string' ? parseFloat(beach.price) : beach.price || 50;
+    const childPrice = adultPrice * 0.7;
+    const numAdults = parseInt(formData.adults) || 0;
+    const numChildren = parseInt(formData.children) || 0;
+
+    const adultSubtotal = numAdults * adultPrice;
+    const childSubtotal = numChildren * childPrice;
+    const subtotal = adultSubtotal + childSubtotal;
+    const tax = subtotal > 0 ? Math.max(subtotal * 0.1, 2) : 0;
+    const calculatedTotal = subtotal + tax;
+
+    // ✅ Update the total in formData whenever it changes
+    setFormData(prev => ({
+      ...prev,
+      total: calculatedTotal.toFixed(2)
+    }));
+  }, [formData.adults, formData.children, beach.price]);
 
   // Fetch weather data based on selected date
   const fetchWeatherData = async (date: string) => {
@@ -462,47 +486,57 @@ const BeachBooking = ({ beach }: BeachProps) => {
     return Object.keys(newErrors).length === 0;
   };
 
-const handleSubmit = async (e: React.FormEvent) => {
+ const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) return;
     setIsSubmitting(true);
 
     try {
-        // Prepare the cart item data
+        // Prepare the cart item data - ✅ Send TOTAL as subtotal to fix cart display
         const cartItemData = {
-            type: 'beach', // ✅ REQUIRED
-            beachId: beach.id,
-            beachName: beach.name,
-            beachLocation: beach.location,
-            beachImageUrl: getImageUrl(beach),
-            adultPrice: adultPrice,
-            childPrice: childPrice,
+            type: 'beach',
+            beach_id: beach.id,
+            beach_name: beach.name,
+            beach_location: beach.location,
+            beach_image_url: getImageUrl(beach),
+            adult_price: adultPrice,
+            child_price: childPrice,
             adults: parseInt(formData.adults),
             children: parseInt(formData.children),
-            preferredDate: formData.preferredDate,
-            subtotal: subtotal,
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            email: formData.email,
-            phone: formData.phone,
-            countryCode: selectedCountry.phoneCode,
-            country: formData.country,
-            city: formData.city,
+            preferred_date: formData.preferredDate,
+            subtotal: parseFloat(formData.total), // ✅ Send TOTAL as subtotal
+            total: parseFloat(formData.total), // ✅ Still send total
+            tax: tax, // ✅ Keep tax for reference
+
+            // Customer fields
+            customer_first_name: formData.firstName,
+            customer_last_name: formData.lastName,
+            customer_email: formData.email,
+            customer_phone: formData.phone,
+            customer_country: formData.country,
+            customer_city: formData.city,
+            customer_address: formData.homeAddress || formData.alternatePickup || '',
         };
+
+        console.log('🔄 Sending beach booking data:', cartItemData);
+        console.log('💰 Subtotal being sent (ACTUALLY TOTAL):', formData.total);
+        console.log('💰 Tax being sent:', tax);
+        console.log('💰 Total being sent:', formData.total);
 
         // Send data to Laravel backend to add to cart
         await router.post('/cart', cartItemData, {
             onSuccess: () => {
+                console.log('✅ Successfully added beach booking to cart');
                 router.visit('/cart');
             },
             onError: (errors: Record<string, string>) => {
-                console.error('Failed to add to cart:', errors);
+                console.error('❌ Failed to add beach booking to cart:', errors);
                 alert('Failed to add item to cart. Please try again.');
             }
         });
 
     } catch (error) {
-        console.error("Error adding to cart:", error);
+        console.error("💥 Error adding to cart:", error);
         alert("An unexpected error occurred. Please try again.");
     } finally {
         setIsSubmitting(false);
@@ -551,7 +585,7 @@ const handleSubmit = async (e: React.FormEvent) => {
                 <h3 className="font-semibold text-gray-800 mb-2">Booking Details</h3>
                 <p className="text-gray-600">{formData.adults} Adult(s), {formData.children} Child(ren)</p>
                 <p className="text-gray-600">Date: {new Date(formData.preferredDate).toLocaleDateString()}</p>
-                <p className="text-gray-600 font-bold mt-2">Total: ${total.toFixed(2)}</p>
+                <p className="text-gray-600 font-bold mt-2">Total: ${formData.total}</p>
               </div>
               <button
                 onClick={() => setBookingSuccess(false)}
@@ -653,7 +687,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     </div>
     <div className="flex justify-between border-t border-gray-200 dark:border-gray-600 pt-2 font-bold text-lg text-green-600 dark:text-green-400">
       <span>Total:</span>
-      <span>${total.toFixed(2)}</span>
+      <span>${formData.total}</span>
     </div>
   </div>
 </section>
@@ -666,7 +700,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     </div>
     <div className="flex justify-between">
       <span>Cost to Cancel:</span>
-      <span className="text-green-400 font-bold">${(total * 0.1).toFixed(2)}</span>
+      <span className="text-green-400 font-bold">${(parseFloat(formData.total) * 0.1).toFixed(2)}</span>
     </div>
     <div className="flex justify-between">
       <span>Cancel for Free Till:</span>
@@ -1128,7 +1162,7 @@ const handleSubmit = async (e: React.FormEvent) => {
             : 'bg-green-500 hover:bg-green-600'
         } transition`}
       >
-        {isSubmitting ? 'Processing...' : `Book Now - ${total.toFixed(2)} `}
+        {isSubmitting ? 'Processing...' : `Book Now - ${formData.total} `}
       </button>
     </div>
   </form>
@@ -1197,7 +1231,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       </div>
       <div className="flex justify-between border-t border-gray-600 pt-2 font-bold text-lg text-green-400">
         <span>Total:</span>
-        <span>${total.toFixed(2)}</span>
+        <span>${formData.total}</span>
       </div>
     </div>
   </section>
@@ -1211,7 +1245,7 @@ const handleSubmit = async (e: React.FormEvent) => {
       </div>
       <div className="flex justify-between">
         <span>Cost to Cancel:</span>
-        <span className="text-green-400 font-bold">${(total * 0.1).toFixed(2)}</span>
+        <span className="text-green-400 font-bold">${(parseFloat(formData.total) * 0.1).toFixed(2)}</span>
       </div>
       <div className="flex justify-between">
         <span>Cancel for Free Till:</span>
@@ -1312,38 +1346,38 @@ const handleSubmit = async (e: React.FormEvent) => {
                   <path d="M5,9A3,3 0 0,1 8,6H16A3,3 0 0,1 19,9V20A2,2 0 0,1 17,22H7A2,2 0 0,1 5,20V9M7,9V20H17V9A1,1 0 0,0 16,8H8A1,1 0 0,0 7,9Z"/>
                 </svg>
                 <span className="font-medium text-gray-300">Low Tide</span>
-              </div>
-              <span className="font-bold text-orange-400">{tideData.lowTide}</span>
             </div>
-            <div className="flex items-center justify-between p-2 bg-gray-700 rounded">
-              <div className="flex items-center space-x-2">
-                <svg className="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12,2A7,7 0 0,1 19,9H17A5,5 0 0,0 12,4A5,5 0 0,0 7,9H5A7,7 0 0,1 12,2M5,9H19A3,3 0 0,1 22,12V20A2,2 0 0,1 20,22H4A2,2 0 0,1 2,20V12A3,3 0 0,1 5,9Z"/>
-                </svg>
-                <span className="text-xs text-gray-400">Next High</span>
-              </div>
-              <span className="text-sm font-semibold text-blue-400">{tideData.nextHigh}</span>
-            </div>
-            <div className="flex items-center justify-between p-2 bg-gray-700 rounded">
-              <div className="flex items-center space-x-2">
-                <svg className="w-4 h-4 text-orange-400" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M5,9A3,3 0 0,1 8,6H16A3,3 0 0,1 19,9V20A2,2 0 0,1 17,22H7A2,2 0 0,1 5,20V9M7,9V20H17V9A1,1 0 0,0 16,8H8A1,1 0 0,0 7,9Z"/>
-                </svg>
-                <span className="text-xs text-gray-400">Next Low</span>
-              </div>
-              <span className="text-sm font-semibold text-orange-400">{tideData.nextLow}</span>
-            </div>
+            <span className="font-bold text-orange-400">{tideData.lowTide}</span>
           </div>
-          <div className="mt-3 text-xs text-gray-400 text-center">
-            Times are in local timezone for {beach.location}
+          <div className="flex items-center justify-between p-2 bg-gray-700 rounded">
+            <div className="flex items-center space-x-2">
+              <svg className="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12,2A7,7 0 0,1 19,9H17A5,5 0 0,0 12,4A5,5 0 0,0 7,9H5A7,7 0 0,1 12,2M5,9H19A3,3 0 0,1 22,12V20A2,2 0 0,1 20,22H4A2,2 0 0,1 2,20V12A3,3 0 0,1 5,9Z"/>
+              </svg>
+              <span className="text-xs text-gray-400">Next High</span>
+            </div>
+            <span className="text-sm font-semibold text-blue-400">{tideData.nextHigh}</span>
+          </div>
+          <div className="flex items-center justify-between p-2 bg-gray-700 rounded">
+            <div className="flex items-center space-x-2">
+              <svg className="w-4 h-4 text-orange-400" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M5,9A3,3 0 0,1 8,6H16A3,3 0 0,1 19,9V20A2,2 0 0,1 17,22H7A2,2 0 0,1 5,20V9M7,9V20H17V9A1,1 0 0,0 16,8H8A1,1 0 0,0 7,9Z"/>
+              </svg>
+              <span className="text-xs text-gray-400">Next Low</span>
+            </div>
+            <span className="text-sm font-semibold text-orange-400">{tideData.nextLow}</span>
           </div>
         </div>
-      ) : (
-        <div className="bg-red-900 p-4 rounded-lg">
-          <p className="text-red-300 text-sm">Unable to load tide data</p>
+        <div className="mt-3 text-xs text-gray-400 text-center">
+          Times are in local timezone for {beach.location}
         </div>
-      )}
-    </div>
+      </div>
+    ) : (
+      <div className="bg-red-900 p-4 rounded-lg">
+        <p className="text-red-300 text-sm">Unable to load tide data</p>
+      </div>
+    )}
+  </div>
   </section>
 
   {/* Mobile Map Section */}

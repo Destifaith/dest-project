@@ -43,8 +43,8 @@ const MainNavbar: React.FC = () => {
       name: "Food & Drinks",
       icon: <Utensils className="w-5 h-5" />,
       items: [
-        { name: "Eateries", href: "/eateries", icon: <Sandwich className="w-5 h-5" /> },
-        { name: "Restaurants", href: "/restaurants", icon: <UtensilsCrossed className="w-5 h-5" /> },
+        { name: "Restaurants", href: "/eateries", icon: <Sandwich className="w-5 h-5" /> },
+        // { name: "Restaurants", href: "/restaurants", icon: <UtensilsCrossed className="w-5 h-5" /> },
         { name: "Pubs & Lounge", href: "/pubs", icon: <Glasses className="w-5 h-5" /> },
       ],
     },
@@ -63,8 +63,8 @@ const MainNavbar: React.FC = () => {
       name: "Fitness & Health",
       icon: <Dumbbell className="w-5 h-5" />,
       items: [
-        { name: "Spa", href: "/spa", icon: <HeartPulse className="w-5 h-5" /> },
-        { name: "Gym", href: "/gym", icon: <Dumbbell className="w-5 h-5" /> },
+        { name: "Spa", href: "/spas-page", icon: <HeartPulse className="w-5 h-5" /> },
+        { name: "Gym", href: "/gyms", icon: <Dumbbell className="w-5 h-5" /> },
       ],
     },
   ];

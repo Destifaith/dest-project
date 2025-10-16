@@ -389,7 +389,21 @@ Route::prefix('gyms')->name('gyms.')->group(function () {
     Route::get('/{gym}', [GymController::class, 'show'])->name('show');
 });
 
-// -----------------------
+// Gym API routes (for React component)
+Route::get('/api/gyms', [GymController::class, 'index']);
+Route::get('/api/gyms/search', [GymController::class, 'search']);
+Route::get('/api/gyms/test', [GymController::class, 'test']);
+Route::get('/api/gyms/all', [GymController::class, 'getAllGyms']);
+// Frontend routes (public facing)
+Route::get('/gyms', [GymController::class, 'frontendIndex'])->name('gyms.frontend.index');
+Route::get('/gyms/{gym}', [GymController::class, 'frontendShow'])->name('gyms.frontend.show');
+//Route::get('/gyms', [GymController::class, 'index']);
+// Gym category API route
+Route::get('/api/gyms/category/{category}', [GymController::class, 'getGymsByCategory']);
+
+// routes/web.php
+Route::get('/gym-booking', [GymController::class, 'booking'])->name('gym.booking');
+
 // Spa Routes
 // -----------------------
 Route::get('/dashboard/entertainment/spa/add', function () {
@@ -425,26 +439,6 @@ Route::prefix('spas')->name('spas.')->group(function () {
     Route::get('/{spa}', [SpaController::class, 'show'])->name('show');
 });
 
-
-
-
-
-
-// routes/web.php
-
-
-
-// Route::get('/eateries/{eatery_id}/daily-menu/{date}', [DailyMenuController::class, 'showUploadForm'])
-//     ->name('daily-menu.upload.form');
-// Route::post('/daily-menu/extract', [DailyMenuController::class, 'extract'])->name('daily-menu.extract');
-// Route::post('/daily-menu/store', [DailyMenuController::class, 'store'])
-//     ->name('daily-menu.store');
-
-// Replace your existing route with a signed version
-// Route::get('/eateries/{eatery_id}/daily-menu/{date}', [DailyMenuController::class, 'showUploadForm'])
-//     ->name('daily-menu.upload.form')
-//     ->middleware('signed'); // Add signed middleware
-// routes/web.php
 Route::get('/menu/login/{eatery_id?}', [MenuLoginController::class, 'showLoginForm'])
     ->name('menu.login');
 
@@ -483,25 +477,59 @@ Route::middleware(['auth', 'verified'])->group(function () {
 Route::get('/api/eateries/{eatery}/menus', [EateryPublishController::class, 'getEateryMenus'])->name('api.eatery.menus');
 
 
-// Add this route for eatery reservation
-// Route::get('/eatery-reservation', function (\Illuminate\Http\Request $request) {
-//     $eateryId = $request->query('id');
 
-//     // Fetch the eatery data - no relationship needed since main_image is a column
-//     $eatery = \App\Models\Eatery::findOrFail($eateryId);
-
-//     return Inertia::render('Main/Eateries/EateryBooking', [
-//         'eatery' => $eatery
-//     ]);
-// })->name('eatery.reservation');
 Route::get('/eatery-reservation', [EateryPublicController::class, 'booking'])->name('eatery.reservation');
 
 
 
 
-////////////////////////////////////////////////eateries frontend page ///////////////////////////////////////
+////////////////////////////////////////////////newly added codes ///////////////////////////////////////
+////////resturant front end //////////////////////////////////////////////////////////////////////
+// routes/web.php
+Route::get('/restaurants', [RestaurantController::class, 'frontendIndex'])->name('restaurants.index');
+//////////////////////////////////////////////////////////////end of newly added codes///////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////gymn frontend///////////////////////////////////
+
+// Frontend Spa Routes (Add these AFTER all other spa routes)
+//Route::get('/spa', [SpaController::class, 'frontendIndex'])->name('spa.frontend.index');
+// Main spa listing page
+Route::get('/spa', function () {
+    $spas = \App\Models\Spa::where('status', 'active')->get();
+
+    return inertia('Main/Spa/Page', [
+        'spas' => $spas
+    ]);
+});
+
+// // Spa detail page
+// Route::get('/spa/{id}', function ($id) {
+//     $spa = \App\Models\Spa::where('status', 'active')->find($id);
+
+//     if (!$spa) {
+//         abort(404);
+//     }
+
+//     return inertia('Main/Spa/Detail', [
+//         'spa' => $spa
+//     ]);
+// });
+
+// In routes/web.php
+Route::get('/spa/{spa}', [SpaController::class, 'frontendShow'])->name('spa.detail');
+
+Route::get('/spa-booking', [SpaController::class, 'booking'])->name('spa.booking');
 
 
-//////////////////////////////////////////////////////////////end of eatery frontend///////////////////////////////////////////////////////
+Route::get('/spa-simple', function () {
+    return "SIMPLE SPA ROUTE WORKING!";
+});
+Route::get('/inertia-test', function () {
+    return inertia('Test', ['message' => 'Inertia is working!']);
+});
+Route::get('/spas-page', function () {
+    $spas = \App\Models\Spa::where('status', 'active')->get();
+    return inertia('Main/Spa/Page', ['spas' => $spas]);
+});
+
 require __DIR__ . '/auth.php';
 require __DIR__ . '/food.php';

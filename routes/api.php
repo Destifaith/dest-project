@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\BeachController;
+use App\Http\Controllers\GymController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,3 +29,9 @@ Route::prefix('beaches')->group(function () {
     Route::put('/{id}', [BeachController::class, 'update']); // update beach
     Route::delete('/{id}', [BeachController::class, 'destroy']); // delete beach
 });
+
+
+Route::get('/gyms', [GymController::class, 'index']);
+Route::get('/gyms/search', [GymController::class, 'search']);
+Route::get('/gyms/test', [GymController::class, 'test']); // For testing
+Route::get('/gyms/all', [GymController::class, 'getAllGyms']); // For client-side fallback

@@ -2,7 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "@inertiajs/react";
 import { Mail, Phone, ShoppingCart, Globe, DollarSign, Store } from "lucide-react";
 
-const TopNav: React.FC = () => {
+interface TopNavProps {
+  cartItemsCount?: number;
+}
+
+const TopNav: React.FC<TopNavProps> = ({ cartItemsCount = 0 }) => {
   const [langOpen, setLangOpen] = useState(false);
   const [language, setLanguage] = useState("English");
   const langRef = useRef<HTMLDivElement>(null);
@@ -139,12 +143,24 @@ const TopNav: React.FC = () => {
             </span>
           </Link>
 
-          {/* Cart */}
-          <Link href="/cart" className="hidden sm:flex items-center hover:text-green-600">
-            <ShoppingCart className="w-4 h-4 mr-1" /> Cart
+          {/* Cart with item count */}
+          <Link href="/cart" className="hidden sm:flex items-center hover:text-green-600 relative">
+            <ShoppingCart className="w-4 h-4 mr-1" />
+            Cart
+            {cartItemsCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                {cartItemsCount > 99 ? '99+' : cartItemsCount}
+              </span>
+            )}
           </Link>
+
           <Link href="/cart" className="sm:hidden group relative">
             <ShoppingCart className="w-5 h-5" />
+            {cartItemsCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                {cartItemsCount > 99 ? '99+' : cartItemsCount}
+              </span>
+            )}
             <span className="absolute left-1/2 -translate-x-1/2 top-6 bg-gray-800 text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100">
               Cart
             </span>

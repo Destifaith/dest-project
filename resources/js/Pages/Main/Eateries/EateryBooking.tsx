@@ -710,114 +710,123 @@ const EateryBooking = () => {
   };
 
   const handleReservationSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateReservationForm() || !eatery) {
-      console.log('handleReservationSubmit: Validation failed or no eatery data');
-      return;
-    }
-    setIsSubmitting(true);
-    try {
-      const cartItemData = {
-        // type: 'reservation',
-        type: 'eatery_reservation',
-        eateryId: eatery.id,
-        eateryName: eatery.name,
-        eateryLocation: eatery.location,
-        eateryImageUrl: eatery.main_image || "/storage/default-eatery.jpg",
-        cuisineType: eatery.cuisine_type,
-        pricePerPerson: pricePerPerson,
-        numberOfPeople: parseInt(reservationForm.numberOfPeople),
-        preferredDate: reservationForm.preferredDate,
-        preferredTime: reservationForm.preferredTime,
-        tablePreference: reservationForm.tablePreference,
-        occasion: reservationForm.occasion,
-        specialRequirements: reservationForm.specialRequirements,
-        subtotal: reservationSubtotal,
-        tax: reservationTax,
-        serviceCharge: reservationServiceCharge,
-        total: reservationTotal,
-        firstName: reservationForm.firstName,
-        lastName: reservationForm.lastName,
-        email: reservationForm.email,
-        phone: reservationForm.phone,
-        countryCode: selectedCountry.phoneCode,
-        country: reservationForm.country,
-        city: reservationForm.city,
+  e.preventDefault();
+  if (!validateReservationForm() || !eatery) {
+    console.log('handleReservationSubmit: Validation failed or no eatery data');
+    return;
+  }
+  setIsSubmitting(true);
+  try {
+    const cartItemData = {
+      type: 'eatery_reservation',
 
-      };
-      await router.post('/cart', cartItemData, {
-        onSuccess: () => {
-          console.log('handleReservationSubmit: Successfully added to cart');
-          router.visit('/cart');
-        },
-        onError: (errors: Record<string, string>) => {
-          console.error('handleReservationSubmit: Failed to add to cart:', errors);
-          alert('Failed to add reservation to cart. Please try again.');
-        }
-      });
-    } catch (error) {
-      console.error("handleReservationSubmit: Error adding to cart:", error);
-      alert("An unexpected error occurred. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+      // ✅ Fixed field names to match backend (snake_case)
+      eatery_id: eatery.id,
+      eatery_name: eatery.name,
+      eatery_location: eatery.location,
+      eatery_image: eatery.main_image || "/storage/default-eatery.jpg",
+      cuisine_type: eatery.cuisine_type,
+      price_per_person: pricePerPerson,
+      number_of_people: parseInt(reservationForm.numberOfPeople),
+      preferred_date: reservationForm.preferredDate,
+      preferred_time: reservationForm.preferredTime,
+      table_preference: reservationForm.tablePreference,
+      occasion: reservationForm.occasion,
+      special_requirements: reservationForm.specialRequirements,
+      subtotal: reservationSubtotal,
+      tax: reservationTax,
+      service_charge: reservationServiceCharge,
+      total: reservationTotal,
 
-  const handleDeliverySubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateDeliveryForm() || !eatery) {
-      console.log('handleDeliverySubmit: Validation failed or no eatery data');
-      return;
-    }
-    setIsSubmitting(true);
-    try {
-      const orderData = {
-        // type: 'delivery',
-        type: 'eatery_delivery',
-        eateryId: eatery.id,
-        eateryName: eatery.name,
-        eateryLocation: eatery.location,
-        eateryImageUrl: eatery.main_image || "/storage/default-eatery.jpg",
-        cuisineType: eatery.cuisine_type,
-        items: cart,
-        subtotal: deliverySubtotal,
-        deliveryFee: deliveryFee,
-        tax: deliveryTax,
-        total: deliveryTotal,
-        deliveryDistance: deliveryDistance,
-        deliveryLocation: deliveryLocation,
-        firstName: deliveryForm.firstName,
-        lastName: deliveryForm.lastName,
-        email: deliveryForm.email,
-        phone: deliveryForm.phone,
-        countryCode: selectedCountry.phoneCode,
-        country: deliveryForm.country,
-        city: deliveryForm.city,
-        address: deliveryForm.address,
-        apartment: deliveryForm.apartment,
-        postalCode: deliveryForm.postalCode,
-        deliveryInstructions: deliveryForm.deliveryInstructions,
-        preferredDate: deliveryForm.preferredDate,
-        preferredTime: deliveryForm.preferredTime,
-        paymentMethod: deliveryForm.paymentMethod,
-      };
-      await router.post('/cart', orderData, {
-        onSuccess: () => {
-          console.log('handleDeliverySubmit: Successfully added to cart');
-          router.visit('/cart');
-        },
-        onError: (errors: Record<string, string>) => {
-          console.error('handleDeliverySubmit: Failed to add to cart:', errors);
-          alert('Failed to add delivery order to cart. Please try again.');
-        }
-      });
-    } catch (error) {
-      console.error("handleDeliverySubmit: Error adding to cart:", error);
-      alert("An unexpected error occurred. Please try again.");
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+      // ✅ Add required customer fields
+      customer_first_name: reservationForm.firstName,
+      customer_last_name: reservationForm.lastName,
+      customer_email: reservationForm.email,
+      customer_phone: reservationForm.phone,
+      customer_country: reservationForm.country,
+      customer_city: reservationForm.city,
+      customer_address: '', // Optional but included for consistency
+    };
+
+    console.log('🔄 Sending reservation data:', cartItemData);
+
+    await router.post('/cart', cartItemData, {
+      onSuccess: () => {
+        console.log('✅ Successfully added reservation to cart');
+        router.visit('/cart');
+      },
+      onError: (errors: Record<string, string>) => {
+        console.error('❌ Failed to add reservation to cart:', errors);
+        alert('Failed to add reservation to cart. Please try again.');
+      }
+    });
+  } catch (error) {
+    console.error("💥 Error adding to cart:", error);
+    alert("An unexpected error occurred. Please try again.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
+ const handleDeliverySubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  if (!validateDeliveryForm() || !eatery) {
+    console.log('handleDeliverySubmit: Validation failed or no eatery data');
+    return;
+  }
+  setIsSubmitting(true);
+  try {
+    const orderData = {
+      type: 'eatery_delivery',
+
+      // ✅ Fixed field names to match backend (snake_case)
+      eatery_id: eatery.id,
+      eatery_name: eatery.name,
+      eatery_location: eatery.location,
+      eatery_image: eatery.main_image || "/storage/default-eatery.jpg",
+      cuisine_type: eatery.cuisine_type,
+      items: cart,
+      subtotal: deliverySubtotal,
+      delivery_fee: deliveryFee,
+      tax: deliveryTax,
+      total: deliveryTotal,
+      delivery_distance: deliveryDistance,
+      delivery_address: deliveryForm.address,
+      delivery_apartment: deliveryForm.apartment,
+      delivery_postal_code: deliveryForm.postalCode,
+      delivery_instructions: deliveryForm.deliveryInstructions,
+      preferred_date: deliveryForm.preferredDate,
+      preferred_time: deliveryForm.preferredTime,
+      payment_method: deliveryForm.paymentMethod,
+
+      // ✅ Add required customer fields
+      customer_first_name: deliveryForm.firstName,
+      customer_last_name: deliveryForm.lastName,
+      customer_email: deliveryForm.email,
+      customer_phone: deliveryForm.phone,
+      customer_country: deliveryForm.country,
+      customer_city: deliveryForm.city,
+    };
+
+    console.log('🔄 Sending delivery data:', orderData);
+
+    await router.post('/cart', orderData, {
+      onSuccess: () => {
+        console.log('✅ Successfully added delivery to cart');
+        router.visit('/cart');
+      },
+      onError: (errors: Record<string, string>) => {
+        console.error('❌ Failed to add delivery to cart:', errors);
+        alert('Failed to add delivery order to cart. Please try again.');
+      }
+    });
+  } catch (error) {
+    console.error("💥 Error adding to cart:", error);
+    alert("An unexpected error occurred. Please try again.");
+  } finally {
+    setIsSubmitting(false);
+  }
+};
 
   // Close dropdowns when clicking outside
   useEffect(() => {

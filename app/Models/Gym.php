@@ -22,11 +22,14 @@ class Gym extends Model
         'main_image',
         'gallery_images',
         'opening_hours',
+        'is_active', // Add this line
     ];
 
     protected $casts = [
         'facilities' => 'array',  // If storing as JSON; otherwise, remove if comma-separated string
         'gallery_images' => 'array',  // Assuming JSON array of image paths
         'opening_hours' => 'array',   // JSON object for hours
+        'is_active' => 'boolean', // Add this line
+
     ];
 }

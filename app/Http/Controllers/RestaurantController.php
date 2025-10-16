@@ -457,4 +457,19 @@ class RestaurantController extends Controller
             'filters' => $request->only(['search', 'status']),
         ]);
     }
+
+    /**
+     * Display restaurants page for frontend (Inertia)
+     */
+    public function frontendIndex()
+    {
+        $restaurants = Restaurant::with('awards')
+            ->where('is_active', true)
+            ->latest()
+            ->get();
+
+        return Inertia::render('Main/Restaurants/Page', [
+            'restaurants' => $restaurants
+        ]);
+    }
 }
